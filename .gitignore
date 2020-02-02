@@ -9,6 +9,9 @@
 /[Bb]uilds/
 /[Ll]ogs/
 
+# Lighting Data too large
+/[Aa]ssets/Scenes/Main/LightingData.asset
+
 # MemoryCaptures can get excessive in size.
 # They also could contain extremely sensitive data
 /[Mm]emoryCaptures/
