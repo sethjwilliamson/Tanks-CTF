@@ -73,5 +73,27 @@ public class TankHealth : MonoBehaviour
         m_ExplosionAudio.Play();
 
         gameObject.SetActive(false);
+
+        if (gameObject.transform.Find("WholeFlag").gameObject.activeSelf) {
+            if (gameObject.tag == "Red") {
+                foreach (GameObject go in Resources.FindObjectsOfTypeAll(typeof(GameObject)) as GameObject[]) {
+                    if (go.name == "Blue Flag") {
+                        Debug.Log(go.name);
+                        go.gameObject.transform.position = transform.position;
+                        go.gameObject.SetActive(true);
+                    }
+                }
+            } else {
+                foreach (GameObject go in Resources.FindObjectsOfTypeAll(typeof(GameObject)) as GameObject[]) {
+                    if (go.name == "Red Flag") {
+                        Debug.Log(go.name);
+                        go.gameObject.transform.position = transform.position;
+                        go.gameObject.SetActive(true);
+                    }
+                }
+            }
+        }
+        gameObject.transform.Find("WholeFlag").gameObject.SetActive(false);
+
     }
 }

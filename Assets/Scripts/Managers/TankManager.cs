@@ -50,15 +50,6 @@ public class TankManager
         }
 
         m_Instance.transform.Find("WholeFlag").gameObject.SetActive(false);
-
-        //GameObject[] children = m_Instance.GetComponentsInChildren<GameObject>();
-//
-        //for (int i = 0; i < children.Length; i++) {
-        //    if (children[i].name == "WholeFlag") {
-        //        children[i].SetActive(false);
-        //    }
-        //}
-
     }
 
 

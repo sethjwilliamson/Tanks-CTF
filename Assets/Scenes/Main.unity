@@ -120,11 +120,14 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
-    - target: {fileID: 1259467432191217784, guid: 3b004aa8eb347c84daf2919930f7720e,
-        type: 3}
-      propertyPath: m_Enabled
-      value: 0
-      objectReference: {fileID: 0}
+    - target: {fileID: 789650480, guid: 3b004aa8eb347c84daf2919930f7720e, type: 3}
+      propertyPath: m_SpawnPointRed
+      value: 
+      objectReference: {fileID: 436868499}
+    - target: {fileID: 789650480, guid: 3b004aa8eb347c84daf2919930f7720e, type: 3}
+      propertyPath: m_SpawnPointBlue
+      value: 
+      objectReference: {fileID: 1874713325}
     - target: {fileID: 2854797476800603710, guid: 3b004aa8eb347c84daf2919930f7720e,
         type: 3}
       propertyPath: m_Name
@@ -183,11 +186,6 @@ PrefabInstance:
     - target: {fileID: 5595108018512642883, guid: 3b004aa8eb347c84daf2919930f7720e,
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 8812362933042823581, guid: 3b004aa8eb347c84daf2919930f7720e,
-        type: 3}
-      propertyPath: m_Enabled
       value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
@@ -268,8 +266,8 @@ GameObject:
   m_Component:
   - component: {fileID: 436868499}
   m_Layer: 0
-  m_Name: SpawnPoint2
-  m_TagString: Untagged
+  m_Name: SpawnPointRed
+  m_TagString: Red
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -282,7 +280,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 436868498}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -37.6, y: 0, z: -31.3}
+  m_LocalPosition: {x: -34.8, y: 0, z: -34.5}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
@@ -600,18 +598,25 @@ MonoBehaviour:
   m_TankPrefab: {fileID: 569292094315969340, guid: 508972bfa8c6f7b4484154a05da9bf34,
     type: 3}
   m_Tanks:
-  - m_PlayerColor: {r: 0, g: 0, b: 0, a: 0}
-    m_SpawnPoint: {fileID: 0}
+  - m_PlayerColor: {r: 0, g: 0, b: 1, a: 0}
+    m_OtherColor: {r: 1, g: 0, b: 0, a: 0}
+    m_SpawnPoint: {fileID: 1874713325}
     m_PlayerNumber: 0
     m_ColoredPlayerText: 
     m_Instance: {fileID: 0}
     m_Wins: 0
-  - m_PlayerColor: {r: 0, g: 0, b: 0, a: 0}
-    m_SpawnPoint: {fileID: 0}
+  - m_PlayerColor: {r: 1, g: 0, b: 0, a: 0}
+    m_OtherColor: {r: 0, g: 0, b: 1, a: 0}
+    m_SpawnPoint: {fileID: 436868499}
     m_PlayerNumber: 0
     m_ColoredPlayerText: 
     m_Instance: {fileID: 0}
     m_Wins: 0
+  m_RedColor: {r: 1, g: 0, b: 0, a: 0}
+  m_BlueColor: {r: 0, g: 0, b: 1, a: 0}
+  m_RedSpawn: {fileID: 436868499}
+  m_BlueSpawn: {fileID: 1874713325}
+  m_Flag: {fileID: 2854797476800603710, guid: 3b004aa8eb347c84daf2919930f7720e, type: 3}
 --- !u!4 &1531231811
 Transform:
   m_ObjectHideFlags: 0
@@ -781,8 +786,8 @@ GameObject:
   m_Component:
   - component: {fileID: 1874713325}
   m_Layer: 0
-  m_Name: SpawnPoint1
-  m_TagString: Untagged
+  m_Name: SpawnPointBlue
+  m_TagString: Blue
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -795,7 +800,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1874713324}
   m_LocalRotation: {x: 0, y: 1, z: 0, w: 0}
-  m_LocalPosition: {x: 39.7, y: 0, z: 39}
+  m_LocalPosition: {x: 38.7, y: 0, z: 36.3}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
@@ -855,6 +860,14 @@ PrefabInstance:
     - target: {fileID: 488946, guid: 1cd1bdb2203012a40ab12a0d2fd7aa88, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6570560, guid: 1cd1bdb2203012a40ab12a0d2fd7aa88, type: 3}
+      propertyPath: m_Enabled
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6589546, guid: 1cd1bdb2203012a40ab12a0d2fd7aa88, type: 3}
+      propertyPath: m_Enabled
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 1cd1bdb2203012a40ab12a0d2fd7aa88, type: 3}

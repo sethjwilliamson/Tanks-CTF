@@ -10,9 +10,10 @@ GameObject:
   m_Component:
   - component: {fileID: 5595108018512642883}
   - component: {fileID: 3421639286684412565}
+  - component: {fileID: 114045251203770274}
   m_Layer: 0
   m_Name: Flag Post
-  m_TagString: Untagged
+  m_TagString: Red
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -47,6 +48,20 @@ CapsuleCollider:
   m_Height: 4
   m_Direction: 1
   m_Center: {x: 0, y: 1, z: 0}
+--- !u!114 &114045251203770274
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2854797476800603710}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 30e0cded445bde44d8177dd92bc90276, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_SpawnPointRed: {fileID: 0}
+  m_SpawnPointBlue: {fileID: 0}
 --- !u!1 &9116807598256473213
 GameObject:
   m_ObjectHideFlags: 0
@@ -131,10 +146,15 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 5595108018512642883}
     m_Modifications:
+    - target: {fileID: 392207237452559060, guid: 01c002a684a3a4e49a879b4992af9664,
+        type: 3}
+      propertyPath: m_Enabled
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 3671054709763509666, guid: 01c002a684a3a4e49a879b4992af9664,
         type: 3}
       propertyPath: m_Name
-      value: Flag
+      value: WholeFlag
       objectReference: {fileID: 0}
     - target: {fileID: 7889779776874201023, guid: 01c002a684a3a4e49a879b4992af9664,
         type: 3}
@@ -189,6 +209,11 @@ PrefabInstance:
     - target: {fileID: 7889779776874201023, guid: 01c002a684a3a4e49a879b4992af9664,
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7944400279960183601, guid: 01c002a684a3a4e49a879b4992af9664,
+        type: 3}
+      propertyPath: m_Enabled
       value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []

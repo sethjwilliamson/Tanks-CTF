@@ -1,25 +1,21 @@
-﻿using System.Collections;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
  
 
-public class GrabFlag : MonoBehaviour
+public class FlagManager : MonoBehaviour
 {    
-    public Transform m_SpawnPointRed; 
-    public Transform m_SpawnPointBlue;  
+    [HideInInspector] public Transform m_SpawnPointRed; 
+    [HideInInspector] public Transform m_SpawnPointBlue;  
+    
     // Start is called before the first frame update
-    //void Start()
-    //{
-    //}
-//
-    //// Update is called once per frame
-    //void Update()
-    //{
-    //    
-    //}
-
-	//When a tank touches the flag
+    void Start()
+    {
+        m_SpawnPointBlue = GameObject.Find("SpawnPointBlue").transform;
+        m_SpawnPointRed = GameObject.Find("SpawnPointRed").transform;
+    }
+    
     private void OnTriggerEnter(Collider other) {
         if (other.gameObject.layer == 9) {
             if (other.gameObject.tag == gameObject.tag) {
@@ -29,6 +25,27 @@ public class GrabFlag : MonoBehaviour
                     Debug.Log("Carrying Flag");
                     if (gameObject.transform.position == m_SpawnPointBlue.position || gameObject.transform.position == m_SpawnPointRed.position) {
                         Debug.Log("+1");
+                        
+                        if (gameObject.tag == "Red") {
+                            foreach (GameObject go in Resources.FindObjectsOfTypeAll(typeof(GameObject)) as GameObject[]) {
+                                if (go.name == "Blue Flag") {
+                                    Debug.Log(go.name);
+                                    go.gameObject.transform.position = m_SpawnPointBlue.position;
+                                    go.gameObject.SetActive(true);
+                                }
+                            }
+                        } else {
+                            foreach (GameObject go in Resources.FindObjectsOfTypeAll(typeof(GameObject)) as GameObject[]) {
+                                if (go.name == "Red Flag") {
+                                    Debug.Log(go.name);
+                                    go.gameObject.transform.position = m_SpawnPointRed.position;
+                                    go.gameObject.SetActive(true);
+                                }
+                            }
+                        }
+
+                        other.gameObject.transform.Find("WholeFlag").gameObject.SetActive(false);
+
                     } else {
                         if (gameObject.tag == "Red") {
                             gameObject.transform.position = m_SpawnPointRed.position;
@@ -53,6 +70,6 @@ public class GrabFlag : MonoBehaviour
             }
         }
     }
-    
 
+    
 }

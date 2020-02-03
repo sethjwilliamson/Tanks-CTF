@@ -12,7 +12,11 @@ public class GameManager : MonoBehaviour
     public Text m_MessageText;                  // Reference to the overlay Text to display winning text, etc.
     public GameObject m_TankPrefab;             // Reference to the prefab the players will control.
     public TankManager[] m_Tanks;               // A collection of managers for enabling and disabling different aspects of the tanks.
-
+    public Color m_RedColor;
+    public Color m_BlueColor;
+    public Transform m_RedSpawn;
+    public Transform m_BlueSpawn;
+    public GameObject m_Flag;
 
     private int m_RoundNumber;                  // Which round the game is currently on.
     private WaitForSeconds m_StartWait;         // Used to have a delay whilst the round starts.
@@ -28,6 +32,7 @@ public class GameManager : MonoBehaviour
         m_EndWait = new WaitForSeconds(m_EndDelay);
 
         SpawnAllTanks();
+        SpawnFlags();
         SetCameraTargets();
 
         // Once the tanks have been created and the camera is using them as targets, start the game.
@@ -46,6 +51,23 @@ public class GameManager : MonoBehaviour
             m_Tanks[i].m_PlayerNumber = i + 1;
             m_Tanks[i].Setup();
         }
+    }
+
+    private void SpawnFlags() {
+        GameObject redFlag = Instantiate(m_Flag);
+        GameObject blueFlag = Instantiate(m_Flag);
+
+        redFlag.transform.position = m_RedSpawn.position;
+        blueFlag.transform.position = m_BlueSpawn.position;
+
+        redFlag.transform.Find("WholeFlag").transform.Find("Flag").GetComponent<Renderer>().material.SetColor("_Color", m_RedColor);
+        blueFlag.transform.Find("WholeFlag").transform.Find("Flag").GetComponent<Renderer>().material.SetColor("_Color", m_BlueColor);
+
+        redFlag.name = "Red Flag";
+        blueFlag.name = "Blue Flag";
+
+        redFlag.tag = "Red";
+        blueFlag.tag = "Blue";
     }
 
 
