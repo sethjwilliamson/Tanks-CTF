@@ -50,6 +50,8 @@ public class TankHealth : MonoBehaviour
         } else {
             gameObject.transform.position = m_SpawnPointBlue.position;
         }
+
+        gameObject.GetComponent<Collider>().enabled = true;
     }
 
     public void TakeDamage(float amount)
@@ -91,6 +93,39 @@ public class TankHealth : MonoBehaviour
         m_ExplosionAudio.Play();
         
 
+        StartCoroutine(Respawn(5));
+
+    }
+
+    
+    IEnumerator Respawn(float spawnDelay)
+     {
+        m_Movement = gameObject.GetComponent<TankMovement>();
+        m_Shooting = gameObject.GetComponent<TankShooting>();
+
+        m_Movement.disable();
+        m_Shooting.enabled = false;
+
+        gameObject.GetComponent<Rigidbody>().constraints = RigidbodyConstraints.FreezeAll;
+
+        gameObject.transform.Find("Canvas").gameObject.SetActive(false);
+
+        MeshRenderer[] renderers = gameObject.GetComponentsInChildren<MeshRenderer>();
+        Color color = renderers[0].material.color;
+        for (int i = 0; i < renderers.Length; i++)
+        {
+            renderers[i].gameObject.SetActive(false);
+        }
+
+        GameObject brokenTank = Instantiate(m_BrokenTank, transform.position, transform.rotation);
+
+        MeshRenderer[] brokenRenderers = brokenTank.GetComponentsInChildren<MeshRenderer>();
+        for (int i = 0; i < brokenRenderers.Length; i++)
+        {
+            brokenRenderers[i].material.color = color;
+        }
+
+
         if (gameObject.transform.Find("WholeFlag").gameObject.activeSelf) {
             if (gameObject.tag == "Red") {
                 foreach (GameObject go in Resources.FindObjectsOfTypeAll(typeof(GameObject)) as GameObject[]) {
@@ -111,35 +146,11 @@ public class TankHealth : MonoBehaviour
             }
         }
 
-        StartCoroutine(Respawn(5));
+        
+        gameObject.GetComponent<Collider>().enabled = false;
 
-    }
+        gameObject.transform.Find("WholeFlag").gameObject.SetActive(false);
 
-    
-    IEnumerator Respawn(float spawnDelay)
-     {
-        m_Movement = gameObject.GetComponent<TankMovement>();
-        m_Shooting = gameObject.GetComponent<TankShooting>();
-
-        m_Movement.disable();
-        m_Shooting.enabled = false;
-
-        gameObject.transform.Find("Canvas").gameObject.SetActive(false);
-
-        MeshRenderer[] renderers = gameObject.GetComponentsInChildren<MeshRenderer>();
-        Color color = renderers[0].material.color;
-        for (int i = 0; i < renderers.Length; i++)
-        {
-            renderers[i].gameObject.SetActive(false);
-        }
-
-        GameObject brokenTank = Instantiate(m_BrokenTank, transform.position, transform.rotation);
-
-        MeshRenderer[] brokenRenderers = brokenTank.GetComponentsInChildren<MeshRenderer>();
-        for (int i = 0; i < brokenRenderers.Length; i++)
-        {
-            brokenRenderers[i].material.color = color;
-        }
 
         yield return new WaitForSeconds(spawnDelay);
 
@@ -154,6 +165,9 @@ public class TankHealth : MonoBehaviour
 
         m_Movement.enable();
         m_Shooting.enabled = true;
+
+        
+        gameObject.GetComponent<Rigidbody>().constraints = RigidbodyConstraints.FreezePositionY | RigidbodyConstraints.FreezeRotationX | RigidbodyConstraints.FreezeRotationZ;
 
         OnEnable();
      }
