@@ -3,6 +3,7 @@ using UnityEngine;
 using UnityEngine.UI;
 
 
+
 public class GameManager : MonoBehaviour
 {
     public int m_NumRoundsToWin = 1;            // The number of rounds a single player has to win to win the game.
@@ -198,7 +199,7 @@ public class GameManager : MonoBehaviour
     private TankManager GetRoundWinner()
     {
         // Go through all the tanks...
-        if (blueCaptures < redCaptures) {
+        if (blueCaptures > redCaptures) {
             for (int i = 0; i < m_Tanks.Length; i++) {
                 if (m_Tanks[i].m_Instance.gameObject.tag == "Blue") {
                     return m_Tanks[i];

@@ -144,8 +144,8 @@ public class TankHealth : MonoBehaviour
                     }
                 }
             }
+            FlagManager.FlagDown(gameObject.tag);
         }
-
         
         gameObject.GetComponent<Collider>().enabled = false;
 

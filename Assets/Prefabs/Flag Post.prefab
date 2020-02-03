@@ -62,6 +62,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_SpawnPointRed: {fileID: 0}
   m_SpawnPointBlue: {fileID: 0}
+  m_ScoreRed: {fileID: 0}
+  m_ScoreBlue: {fileID: 0}
 --- !u!1 &9116807598256473213
 GameObject:
   m_ObjectHideFlags: 0
