@@ -9,14 +9,22 @@ public class TankMovement : MonoBehaviour
     public AudioClip m_EngineIdling;       
     public AudioClip m_EngineDriving;      
     public float m_PitchRange = 0.2f;
-
+    
+    private int enableScalar = 1;
     private string m_MovementAxisName;     
     private string m_TurnAxisName;         
     private Rigidbody m_Rigidbody;         
     private float m_MovementInputValue;    
     private float m_TurnInputValue;        
-    private float m_OriginalPitch;         
+    private float m_OriginalPitch;
 
+    public void enable() {
+        enableScalar = 1;
+    }
+
+    public void disable() {
+        enableScalar = 0;
+    }
 
     private void Awake()
     {
@@ -50,8 +58,8 @@ public class TankMovement : MonoBehaviour
     {
         // Store the player's input and make sure the audio for the engine is playing.
         
-        m_MovementInputValue = Input.GetAxis(m_MovementAxisName);
-        m_TurnInputValue = Input.GetAxis(m_TurnAxisName);
+        m_MovementInputValue = Input.GetAxis(m_MovementAxisName) * enableScalar;
+        m_TurnInputValue = Input.GetAxis(m_TurnAxisName) * enableScalar;
 
         EngineAudio();
     }

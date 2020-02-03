@@ -1,5 +1,7 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
+using System.Collections;
+
 
 public class TankHealth : MonoBehaviour
 {
@@ -9,13 +11,23 @@ public class TankHealth : MonoBehaviour
     public Color m_FullHealthColor = Color.green;  
     public Color m_ZeroHealthColor = Color.red;    
     public GameObject m_ExplosionPrefab;
+    public GameObject m_BrokenTank;
     
     
+    [HideInInspector] public Transform m_SpawnPointRed; 
+    [HideInInspector] public Transform m_SpawnPointBlue;  
     private AudioSource m_ExplosionAudio;          
     private ParticleSystem m_ExplosionParticles;   
     private float m_CurrentHealth;  
     private bool m_Dead;            
+    private TankMovement m_Movement;
+    private TankShooting m_Shooting;
 
+    void Start()
+    {
+        m_SpawnPointBlue = GameObject.Find("SpawnPointBlue").transform;
+        m_SpawnPointRed = GameObject.Find("SpawnPointRed").transform;
+    }
 
     private void Awake()
     {
@@ -32,6 +44,12 @@ public class TankHealth : MonoBehaviour
         m_Dead = false;
 
         SetHealthUI();
+
+        if (gameObject.tag == "Red") {
+            gameObject.transform.position = m_SpawnPointRed.position;
+        } else {
+            gameObject.transform.position = m_SpawnPointBlue.position;
+        }
     }
 
     public void TakeDamage(float amount)
@@ -71,8 +89,7 @@ public class TankHealth : MonoBehaviour
         m_ExplosionParticles.Play();
 
         m_ExplosionAudio.Play();
-
-        gameObject.SetActive(false);
+        
 
         if (gameObject.transform.Find("WholeFlag").gameObject.activeSelf) {
             if (gameObject.tag == "Red") {
@@ -93,7 +110,52 @@ public class TankHealth : MonoBehaviour
                 }
             }
         }
-        gameObject.transform.Find("WholeFlag").gameObject.SetActive(false);
+
+        StartCoroutine(Respawn(5));
 
     }
+
+    
+    IEnumerator Respawn(float spawnDelay)
+     {
+        m_Movement = gameObject.GetComponent<TankMovement>();
+        m_Shooting = gameObject.GetComponent<TankShooting>();
+
+        m_Movement.disable();
+        m_Shooting.enabled = false;
+
+        gameObject.transform.Find("Canvas").gameObject.SetActive(false);
+
+        MeshRenderer[] renderers = gameObject.GetComponentsInChildren<MeshRenderer>();
+        Color color = renderers[0].material.color;
+        for (int i = 0; i < renderers.Length; i++)
+        {
+            renderers[i].gameObject.SetActive(false);
+        }
+
+        GameObject brokenTank = Instantiate(m_BrokenTank, transform.position, transform.rotation);
+
+        MeshRenderer[] brokenRenderers = brokenTank.GetComponentsInChildren<MeshRenderer>();
+        for (int i = 0; i < brokenRenderers.Length; i++)
+        {
+            brokenRenderers[i].material.color = color;
+        }
+
+        yield return new WaitForSeconds(spawnDelay);
+
+        gameObject.transform.Find("Canvas").gameObject.SetActive(true);
+
+        for (int i = 0; i < renderers.Length; i++)
+        {
+            renderers[i].gameObject.SetActive(true);
+        }
+        
+        Destroy(brokenTank);
+
+        m_Movement.enable();
+        m_Shooting.enabled = true;
+
+        OnEnable();
+     }
+
 }
