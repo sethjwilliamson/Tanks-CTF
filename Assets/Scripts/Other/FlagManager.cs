@@ -8,7 +8,7 @@ public class FlagManager : MonoBehaviour
 {    
     [HideInInspector] public Transform m_SpawnPointRed; 
     [HideInInspector] public Transform m_SpawnPointBlue;  
-    
+
     // Start is called before the first frame update
     void Start()
     {
@@ -32,6 +32,7 @@ public class FlagManager : MonoBehaviour
                                     Debug.Log(go.name);
                                     go.gameObject.transform.position = m_SpawnPointBlue.position;
                                     go.gameObject.SetActive(true);
+                                    GameManager.blueCaptures++;
                                 }
                             }
                         } else {
@@ -40,6 +41,7 @@ public class FlagManager : MonoBehaviour
                                     Debug.Log(go.name);
                                     go.gameObject.transform.position = m_SpawnPointRed.position;
                                     go.gameObject.SetActive(true);
+                                    GameManager.redCaptures++;
                                 }
                             }
                         }
