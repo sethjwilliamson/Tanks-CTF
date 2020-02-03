@@ -4,7 +4,9 @@ using UnityEngine;
 [Serializable]
 public class TankManager
 {
-    public Color m_PlayerColor;            
+    public Color m_PlayerColor; 
+    //Temporary
+    public Color m_OtherColor;
     public Transform m_SpawnPoint;         
     [HideInInspector] public int m_PlayerNumber;             
     [HideInInspector] public string m_ColoredPlayerText;
@@ -26,14 +28,37 @@ public class TankManager
         m_Movement.m_PlayerNumber = m_PlayerNumber;
         m_Shooting.m_PlayerNumber = m_PlayerNumber;
 
+        if (m_PlayerNumber % 2 == 0) {
+            m_Instance.tag = "Red";
+        } else {
+            m_Instance.tag = "Blue";
+        }
+
         m_ColoredPlayerText = "<color=#" + ColorUtility.ToHtmlStringRGB(m_PlayerColor) + ">PLAYER " + m_PlayerNumber + "</color>";
 
         MeshRenderer[] renderers = m_Instance.GetComponentsInChildren<MeshRenderer>();
 
         for (int i = 0; i < renderers.Length; i++)
         {
-            renderers[i].material.color = m_PlayerColor;
+            if (renderers[i].name == "Pole") {
+                continue;
+            } else if (renderers[i].name == "Flag") {
+                renderers[i].material.color = m_OtherColor;
+            } else {
+                renderers[i].material.color = m_PlayerColor;
+            }
         }
+
+        m_Instance.transform.Find("WholeFlag").gameObject.SetActive(false);
+
+        //GameObject[] children = m_Instance.GetComponentsInChildren<GameObject>();
+//
+        //for (int i = 0; i < children.Length; i++) {
+        //    if (children[i].name == "WholeFlag") {
+        //        children[i].SetActive(false);
+        //    }
+        //}
+
     }
 
 
