@@ -12,8 +12,12 @@ public class TankHealth : MonoBehaviour
     public Color m_ZeroHealthColor = Color.red;    
     public GameObject m_ExplosionPrefab;
     public GameObject m_BrokenTank;
+    public AudioClip m_RedFlagDropped;
+    public AudioClip m_BlueFlagDropped;
     
     
+    [HideInInspector] private GameManager gm;  
+    //[HideInInspector] private FlagManager fm;  
     [HideInInspector] public Transform m_SpawnPointRed; 
     [HideInInspector] public Transform m_SpawnPointBlue;  
     private AudioSource m_ExplosionAudio;          
@@ -27,6 +31,8 @@ public class TankHealth : MonoBehaviour
     {
         m_SpawnPointBlue = GameObject.Find("SpawnPointBlue").transform;
         m_SpawnPointRed = GameObject.Find("SpawnPointRed").transform;
+
+        gm = GameObject.Find("GameManager").GetComponent<GameManager>();
     }
 
     private void Awake()
@@ -130,7 +136,9 @@ public class TankHealth : MonoBehaviour
             if (gameObject.tag == "Red") {
                 foreach (GameObject go in Resources.FindObjectsOfTypeAll(typeof(GameObject)) as GameObject[]) {
                     if (go.name == "Blue Flag") {
-                        Debug.Log(go.name);
+                        gm.BroadcastMessage("FlagDrop", "Blue");
+                        gm.SendMessage("PlayAudio", m_BlueFlagDropped);
+                        
                         go.gameObject.transform.position = transform.position;
                         go.gameObject.SetActive(true);
                     }
@@ -138,13 +146,14 @@ public class TankHealth : MonoBehaviour
             } else {
                 foreach (GameObject go in Resources.FindObjectsOfTypeAll(typeof(GameObject)) as GameObject[]) {
                     if (go.name == "Red Flag") {
-                        Debug.Log(go.name);
+                        gm.SendMessage("FlagDrop", "Red");
+                        gm.SendMessage("PlayAudio", m_RedFlagDropped);
+
                         go.gameObject.transform.position = transform.position;
                         go.gameObject.SetActive(true);
                     }
                 }
             }
-            FlagManager.FlagDown(gameObject.tag);
         }
         
         gameObject.GetComponent<Collider>().enabled = false;

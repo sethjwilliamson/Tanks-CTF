@@ -19,6 +19,24 @@ public class GameManager : MonoBehaviour
     public Transform m_BlueSpawn;
     public GameObject m_Flag;
     public int m_NumCaptures;
+    public AudioSource m_Announcer;
+    public Text m_ScoreRed;
+    public Text m_ScoreBlue;
+
+    public AudioClip m_BlueWinsRound;
+    public AudioClip m_RedWinsRound;
+    public AudioClip m_BlueWinsMatch;
+    public AudioClip m_RedWinsMatch;
+    public AudioClip m_FlawlessWin;
+    public AudioClip m_Play;
+
+    
+    public GameObject m_FlagDownRed; 
+    public GameObject m_FlagDownBlue;  
+    public GameObject m_FlagAtBaseRed; 
+    public GameObject m_FlagAtBaseBlue;  
+    public GameObject m_FlagTakenRed; 
+    public GameObject m_FlagTakenBlue; 
 
 
     public static int blueCaptures;
@@ -132,6 +150,8 @@ public class GameManager : MonoBehaviour
         ResetAllTanks();
         DisableTankControl();
 
+        m_ScoreBlue.text = m_ScoreRed.text = "0";
+
         // Snap the camera's zoom and position to something appropriate for the reset tanks.
         m_CameraControl.SetStartPositionAndSize();
 
@@ -148,6 +168,8 @@ public class GameManager : MonoBehaviour
     {
         // As soon as the round begins playing let the players control the tanks.
         EnableTankControl();
+        m_Announcer.clip = m_Play;
+        m_Announcer.Play();
 
         // Clear the text from the screen.
         m_MessageText.text = string.Empty;
@@ -173,8 +195,9 @@ public class GameManager : MonoBehaviour
         m_RoundWinner = GetRoundWinner();
 
         // If there is a winner, increment their score.
-        if (m_RoundWinner != null)
+        if (m_RoundWinner != null) {
             m_RoundWinner.m_Wins++;
+        }
 
         // Now the winner's score has been incremented, see if someone has one the game.
         m_GameWinner = GetGameWinner();
@@ -184,6 +207,8 @@ public class GameManager : MonoBehaviour
         m_MessageText.text = message;
 
         redCaptures = blueCaptures = 0;
+
+        
 
         // Wait for the specified length of time until yielding control back to the game loop.
         yield return m_EndWait;
@@ -239,10 +264,18 @@ public class GameManager : MonoBehaviour
     {
         // By default when a round ends there are no winners so the default end message is a draw.
         string message = "DRAW!";
+        m_Announcer.clip = m_Play;
 
         // If there is a winner then change the message to reflect that.
-        if (m_RoundWinner != null)
+        if (m_RoundWinner != null) {
             message = m_RoundWinner.m_ColoredPlayerText + " WINS THE ROUND!";
+            /// Wins round clip
+            if (m_RoundWinner.m_Instance.tag == "Red") {
+                m_Announcer.clip = m_RedWinsRound;
+            } else {
+                m_Announcer.clip = m_BlueWinsRound;
+            }
+        }
 
         // Add some line breaks after the initial message.
         message += "\n\n\n\n";
@@ -254,8 +287,16 @@ public class GameManager : MonoBehaviour
         }
 
         // If there is a game winner, change the entire message to reflect that.
-        if (m_GameWinner != null)
+        if (m_GameWinner != null) {
             message = m_GameWinner.m_ColoredPlayerText + " WINS THE GAME!";
+            /// Wins game clip
+            if (m_RoundWinner.m_Instance.tag == "Red") {
+                m_Announcer.clip = m_RedWinsMatch;
+            } else {
+                m_Announcer.clip = m_BlueWinsMatch;
+            }
+        }
+        m_Announcer.Play();
 
         return message;
     }
@@ -285,6 +326,24 @@ public class GameManager : MonoBehaviour
         for (int i = 0; i < m_Tanks.Length; i++)
         {
             m_Tanks[i].DisableControl();
+        }
+    }
+
+    public void PlayAudio(AudioClip ac) {
+        m_Announcer.clip = ac;
+        m_Announcer.Play();
+    }
+
+    
+    public void FlagDrop(string team) {
+        if (team == "Red") {
+            m_FlagAtBaseRed.SetActive(false);
+            m_FlagDownRed.SetActive(true);
+            m_FlagTakenRed.SetActive(false);
+        } else {
+            m_FlagAtBaseBlue.SetActive(false);
+            m_FlagDownBlue.SetActive(true);
+            m_FlagTakenBlue.SetActive(false);
         }
     }
 
