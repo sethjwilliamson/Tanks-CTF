@@ -8,6 +8,13 @@ using UnityEngine.UI;
 public class FlagManager : MonoBehaviour
 {    
     
+    public static AudioSource m_Announcer;  
+    public AudioClip m_RedScore;   
+    public AudioClip m_BlueScore;   
+    public static AudioClip m_RedFlagTaken;   
+    public static AudioClip m_BlueFlagTaken;   
+    public AudioClip m_RedFlagReturned;   
+    public AudioClip m_BlueFlagReturned;   
     [HideInInspector] public Transform m_SpawnPointRed; 
     [HideInInspector] public Transform m_SpawnPointBlue;  
     [HideInInspector] private static Text m_ScoreRed; 
@@ -19,7 +26,6 @@ public class FlagManager : MonoBehaviour
     [HideInInspector] private static GameObject m_FlagTakenRed; 
     [HideInInspector] private static GameObject m_FlagTakenBlue;  
 
-    // Start is called before the first frame update
     void Start()
     {
         m_SpawnPointBlue =  GameObject.Find("SpawnPointBlue").transform;
@@ -84,6 +90,11 @@ public class FlagManager : MonoBehaviour
                                     m_FlagDownBlue.SetActive(false);
                                     m_FlagTakenBlue.SetActive(false);
                                     
+                                    /// Red Score
+                                    m_Announcer.clip = m_RedScore;
+                                    m_Announcer.Play();
+
+                                    /// Takes lead ?
                                 }
                             }
                         } else {
@@ -102,6 +113,12 @@ public class FlagManager : MonoBehaviour
                                     m_FlagAtBaseRed.SetActive(true);
                                     m_FlagDownRed.SetActive(false);
                                     m_FlagTakenRed.SetActive(false);
+
+                                    /// Blue Score
+                                    m_Announcer.clip = m_BlueScore;
+                                    m_Announcer.Play();
+
+                                    /// Takes lead ?
                                 }
                             }
                         }
@@ -116,12 +133,20 @@ public class FlagManager : MonoBehaviour
                             m_FlagDownRed.SetActive(false);
                             m_FlagTakenRed.SetActive(false);
 
+                            /// Red Flag Returned
+                            m_Announcer.clip = m_RedFlagReturned;
+                            m_Announcer.Play();
+
                         } else {
                             gameObject.transform.position = m_SpawnPointBlue.position;
 
                             m_FlagAtBaseBlue.SetActive(true);
                             m_FlagDownBlue.SetActive(false);
                             m_FlagTakenBlue.SetActive(false);
+
+                            /// Blue Flag Returned
+                            m_Announcer.clip = m_BlueFlagReturned;
+                            m_Announcer.Play();
                         }
                     }
                 } else {
@@ -132,12 +157,20 @@ public class FlagManager : MonoBehaviour
                             m_FlagAtBaseRed.SetActive(true);
                             m_FlagDownRed.SetActive(false);
                             m_FlagTakenRed.SetActive(false);
+
+                            /// Red Flag Returned
+                            m_Announcer.clip = m_RedFlagReturned;
+                            m_Announcer.Play();
                         } else {
                             gameObject.transform.position = m_SpawnPointBlue.position;
                             
                             m_FlagAtBaseBlue.SetActive(true);
                             m_FlagDownBlue.SetActive(false);
                             m_FlagTakenBlue.SetActive(false);
+
+                            /// Blue Flag Returned
+                            m_Announcer.clip = m_BlueFlagReturned;
+                            m_Announcer.Play();
                         }
                     }
                 }
@@ -151,12 +184,20 @@ public class FlagManager : MonoBehaviour
                     m_FlagAtBaseRed.SetActive(false);
                     m_FlagDownRed.SetActive(false);
                     m_FlagTakenRed.SetActive(true);
+
+                    /// Red Flag Taken
+                    m_Announcer.clip = m_RedFlagTaken;
+                    m_Announcer.Play();
                 } else {
                     gameObject.transform.position = m_SpawnPointBlue.position;
                     
                     m_FlagAtBaseBlue.SetActive(false);
                     m_FlagDownBlue.SetActive(false);
                     m_FlagTakenBlue.SetActive(true);
+
+                    /// Blue Flag Taken
+                    m_Announcer.clip = m_BlueFlagTaken;
+                    m_Announcer.Play();
                 }
             }
         }
@@ -167,10 +208,24 @@ public class FlagManager : MonoBehaviour
             m_FlagAtBaseBlue.SetActive(false);
             m_FlagDownBlue.SetActive(true);
             m_FlagTakenBlue.SetActive(false);
+
+            /// Blue Flag Taken
+            m_Announcer.clip = m_BlueFlagTaken;
+            m_Announcer.Play();
         } else {
             m_FlagAtBaseRed.SetActive(false);
             m_FlagDownRed.SetActive(true);
             m_FlagTakenRed.SetActive(false);
+
+            /// Red Flag Taken
+            m_Announcer.clip = m_RedFlagTaken;
+            m_Announcer.Play();
         }
+    }
+
+    private void Invis(GameObject go) {
+        Renderer[] rs = go.GetComponentsInChildren<Renderer>();
+        foreach (Renderer r in rs)
+            r.enabled = false;
     }
 }
