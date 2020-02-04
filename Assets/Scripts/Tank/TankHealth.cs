@@ -51,10 +51,15 @@ public class TankHealth : MonoBehaviour
 
         SetHealthUI();
 
-        if (gameObject.tag == "Red") {
-            gameObject.transform.position = m_SpawnPointRed.position;
-        } else {
-            gameObject.transform.position = m_SpawnPointBlue.position;
+        try {
+            if (gameObject.tag == "Red") {
+                gameObject.transform.position = m_SpawnPointRed.position;
+            } else {
+                gameObject.transform.position = m_SpawnPointBlue.position;
+            }
+        } catch (UnassignedReferenceException) {
+            // Sometimes causes an error when this function finishes before Start.
+            // Not necessary when first starting
         }
 
         gameObject.GetComponent<Collider>().enabled = true;

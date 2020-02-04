@@ -66,6 +66,10 @@ MonoBehaviour:
   m_BlueFlagTaken: {fileID: 8300000, guid: d4078b773b6b9e949904177289b436bd, type: 3}
   m_RedFlagReturned: {fileID: 8300000, guid: b2df47166a4c83344a54ce8153ff6617, type: 3}
   m_BlueFlagReturned: {fileID: 8300000, guid: d5c60a9284f179b448d159a4123d05c1, type: 3}
+  m_BlueIncreasesLead: {fileID: 8300000, guid: b891a0243b45a2d4eb57ccccc4fe96c3, type: 3}
+  m_RedIncreasesLead: {fileID: 8300000, guid: 645c39a2fbc9d3749ae2e12bacec837b, type: 3}
+  m_BlueTakesLead: {fileID: 8300000, guid: 2488c1966d444ff4292c5f147d229e42, type: 3}
+  m_RedTakesLead: {fileID: 8300000, guid: 2498c9c25d6e8334db13e08898e65b0d, type: 3}
   m_SpawnPointRed: {fileID: 0}
   m_SpawnPointBlue: {fileID: 0}
 --- !u!1 &9116807598256473213

@@ -150,6 +150,7 @@ public class GameManager : MonoBehaviour
         ResetAllTanks();
         DisableTankControl();
 
+        redCaptures = blueCaptures = 0;
         m_ScoreBlue.text = m_ScoreRed.text = "0";
 
         // Snap the camera's zoom and position to something appropriate for the reset tanks.
@@ -206,9 +207,13 @@ public class GameManager : MonoBehaviour
         string message = EndMessage();
         m_MessageText.text = message;
 
-        redCaptures = blueCaptures = 0;
-
         
+        yield return new WaitForSeconds(m_Announcer.clip.length);
+        
+        if (blueCaptures == 0 || redCaptures == 0) {
+            m_Announcer.clip = m_FlawlessWin;
+            m_Announcer.Play();
+        }
 
         // Wait for the specified length of time until yielding control back to the game loop.
         yield return m_EndWait;
@@ -278,7 +283,7 @@ public class GameManager : MonoBehaviour
         }
 
         // Add some line breaks after the initial message.
-        message += "\n\n\n\n";
+        message += "\n\n\n";
 
         // Go through all the tanks and add each of their scores to the message.
         for (int i = 0; i < m_Tanks.Length; i++)

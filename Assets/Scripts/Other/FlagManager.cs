@@ -15,6 +15,11 @@ public class FlagManager : MonoBehaviour
     public AudioClip m_BlueFlagTaken;   
     public AudioClip m_RedFlagReturned;   
     public AudioClip m_BlueFlagReturned;   
+    public AudioClip m_BlueIncreasesLead;   
+    public AudioClip m_RedIncreasesLead;   
+    public AudioClip m_BlueTakesLead;   
+    public AudioClip m_RedTakesLead;   
+
     [HideInInspector] public Transform m_SpawnPointRed; 
     [HideInInspector] public Transform m_SpawnPointBlue;  
     [HideInInspector] private static Text m_ScoreRed; 
@@ -73,67 +78,111 @@ public class FlagManager : MonoBehaviour
     }
     
     private void OnTriggerEnter(Collider other) {
-        if (other.gameObject.layer == 9) {
-        // Collision is with Player
-            if (other.gameObject.tag == gameObject.tag) {
-            // Same Team
-                if (other.gameObject.transform.Find("WholeFlag").gameObject.activeSelf) {
-                // Carrying a flag
-                    if (gameObject.transform.position == m_SpawnPointBlue.position || gameObject.transform.position == m_SpawnPointRed.position) {
-                    // Team's flag is at base
-                        if (gameObject.tag == "Red") {
-                        // This flag (this game object) is red
-                            foreach (GameObject go in Resources.FindObjectsOfTypeAll(typeof(GameObject)) as GameObject[]) {
-                                if (go.name == "Blue Flag") {
-                                    go.gameObject.transform.position = m_SpawnPointBlue.position;
-                                    go.gameObject.SetActive(true);
-                                    GameManager.redCaptures++;
+        try {
+            if (other.gameObject.layer == 9) {
+            // Collision is with Player
+                if (other.gameObject.tag == gameObject.tag) {
+                // Same Team
+                    if (other.gameObject.transform.Find("WholeFlag").gameObject.activeSelf) {
+                    // Carrying a flag
+                        if (gameObject.transform.position == m_SpawnPointBlue.position || gameObject.transform.position == m_SpawnPointRed.position) {
+                        // Team's flag is at base
+                            if (gameObject.tag == "Red") {
+                            // This flag (this game object) is red
+                                foreach (GameObject go in Resources.FindObjectsOfTypeAll(typeof(GameObject)) as GameObject[]) {
+                                    if (go.name == "Blue Flag") {
+                                        go.gameObject.transform.position = m_SpawnPointBlue.position;
+                                        go.gameObject.SetActive(true);
+                                        GameManager.redCaptures++;
 
-                                    m_ScoreRed.GetComponent<Text>().text = GameManager.redCaptures.ToString();
-                                    
-                                    Debug.Log("Red: " + GameManager.redCaptures);
+                                        m_ScoreRed.GetComponent<Text>().text = GameManager.redCaptures.ToString();
+                                        
+                                        Debug.Log("Red: " + GameManager.redCaptures);
 
-                                    m_FlagAtBaseBlue.SetActive(true);
-                                    m_FlagDownBlue.SetActive(false);
-                                    m_FlagTakenBlue.SetActive(false);
-                                    
-                                    /// Red Score
-                                    gm.SendMessage("PlayAudio", m_RedScore);
+                                        m_FlagAtBaseBlue.SetActive(true);
+                                        m_FlagDownBlue.SetActive(false);
+                                        m_FlagTakenBlue.SetActive(false);
+                                        
+                                        /// Red Score
+                                        if (GameManager.redCaptures > GameManager.blueCaptures + 1) {
+                                            // Increases lead
+                                            gm.SendMessage("PlayAudio", m_RedIncreasesLead);
+                                        } else if (GameManager.redCaptures > GameManager.blueCaptures) {
+                                            // Takes Lead
+                                            gm.SendMessage("PlayAudio", m_RedTakesLead);
+                                        } else {
+                                            // Scores
+                                            gm.SendMessage("PlayAudio", m_RedScore);
+                                        }
+                                    }
+                                }
+                            } else {
+                            // This flag (this game object) is blue
+                                foreach (GameObject go in Resources.FindObjectsOfTypeAll(typeof(GameObject)) as GameObject[]) {
+                                    if (go.name == "Red Flag") {
+                                        go.gameObject.transform.position = m_SpawnPointRed.position;
+                                        go.gameObject.SetActive(true);
+                                        GameManager.blueCaptures++;
 
-                                    /// Takes lead ?
+                                        //Debug.Log(m_ScoreRed.GetComponent<Text>().text);
+
+                                        m_ScoreBlue.GetComponent<Text>().text = GameManager.blueCaptures.ToString();
+
+                                        Debug.Log("Blue: " + GameManager.blueCaptures);
+
+                                        m_FlagAtBaseRed.SetActive(true);
+                                        m_FlagDownRed.SetActive(false);
+                                        m_FlagTakenRed.SetActive(false);
+
+                                        /// Blue Score
+                                        
+                                        /// Red Score
+                                        if (GameManager.blueCaptures > GameManager.redCaptures + 1) {
+                                            // Increases lead
+                                            gm.SendMessage("PlayAudio", m_BlueIncreasesLead);
+                                        } else if (GameManager.blueCaptures > GameManager.redCaptures) {
+                                            // Takes Lead
+                                            gm.SendMessage("PlayAudio", m_BlueTakesLead);
+                                        } else {
+                                            // Scores
+                                            gm.SendMessage("PlayAudio", m_BlueScore);
+                                        }
+                                    }
                                 }
                             }
+
+                            other.gameObject.transform.Find("WholeFlag").gameObject.SetActive(false);
+
                         } else {
-                        // This flag (this game object) is blue
-                            foreach (GameObject go in Resources.FindObjectsOfTypeAll(typeof(GameObject)) as GameObject[]) {
-                                if (go.name == "Red Flag") {
-                                    go.gameObject.transform.position = m_SpawnPointRed.position;
-                                    go.gameObject.SetActive(true);
-                                    GameManager.blueCaptures++;
+                        // Flag is not at base
+                            if (gameObject.tag == "Red") {
+                                gameObject.transform.position = m_SpawnPointRed.position;
+                                
+                                m_FlagAtBaseRed.SetActive(true);
+                                m_FlagDownRed.SetActive(false);
+                                m_FlagTakenRed.SetActive(false);
 
-                                    //Debug.Log(m_ScoreRed.GetComponent<Text>().text);
+                                /// Red Flag Returned
+                                gm.SendMessage("PlayAudio", m_RedFlagReturned);
 
-                                    m_ScoreBlue.GetComponent<Text>().text = GameManager.blueCaptures.ToString();
+                            } else {
+                                gameObject.transform.position = m_SpawnPointBlue.position;
 
-                                    Debug.Log("Blue: " + GameManager.blueCaptures);
+                                m_FlagAtBaseBlue.SetActive(true);
+                                m_FlagDownBlue.SetActive(false);
+                                m_FlagTakenBlue.SetActive(false);
 
-                                    m_FlagAtBaseRed.SetActive(true);
-                                    m_FlagDownRed.SetActive(false);
-                                    m_FlagTakenRed.SetActive(false);
-
-                                    /// Blue Score
-                                    gm.SendMessage("PlayAudio", m_BlueScore);
-
-                                    /// Takes lead ?
-                                }
+                                /// Blue Flag Returned
+                                gm.SendMessage("PlayAudio", m_BlueFlagReturned);
                             }
                         }
-
-                        other.gameObject.transform.Find("WholeFlag").gameObject.SetActive(false);
-
                     } else {
-                    // Flag is not at base
-                        if (gameObject.tag == "Red") {
+                    // Not carrying a flag
+                        if (gameObject.tag == "Red") {                        
+                            if (gameObject.transform.position != m_SpawnPointRed.position) {
+                                gm.SendMessage("PlayAudio", m_RedFlagReturned);
+                            }
+
                             gameObject.transform.position = m_SpawnPointRed.position;
                             
                             m_FlagAtBaseRed.SetActive(true);
@@ -141,73 +190,50 @@ public class FlagManager : MonoBehaviour
                             m_FlagTakenRed.SetActive(false);
 
                             /// Red Flag Returned
-                            gm.SendMessage("PlayAudio", m_RedFlagReturned);
-
                         } else {
-                            gameObject.transform.position = m_SpawnPointBlue.position;
+                            if (gameObject.transform.position != m_SpawnPointBlue.position) {
+                                gm.SendMessage("PlayAudio", m_BlueFlagReturned);
+                            }
 
+                            gameObject.transform.position = m_SpawnPointBlue.position;
+                            
                             m_FlagAtBaseBlue.SetActive(true);
                             m_FlagDownBlue.SetActive(false);
                             m_FlagTakenBlue.SetActive(false);
 
                             /// Blue Flag Returned
-                            gm.SendMessage("PlayAudio", m_BlueFlagReturned);
                         }
                     }
                 } else {
-                // Not carrying a flag
-                    if (gameObject.tag == "Red") {                        
-                        if (gameObject.transform.position != m_SpawnPointRed.position) {
-                            gm.SendMessage("PlayAudio", m_RedFlagReturned);
-                        }
+                // Other Team
+                    gameObject.SetActive(false);
+                    other.gameObject.transform.Find("WholeFlag").gameObject.SetActive(true);
 
+                    if (gameObject.tag == "Red") {
                         gameObject.transform.position = m_SpawnPointRed.position;
                         
-                        m_FlagAtBaseRed.SetActive(true);
+                        m_FlagAtBaseRed.SetActive(false);
                         m_FlagDownRed.SetActive(false);
-                        m_FlagTakenRed.SetActive(false);
+                        m_FlagTakenRed.SetActive(true);
 
-                        /// Red Flag Returned
+                        /// Red Flag Taken
+                        gm.SendMessage("PlayAudio", m_RedFlagTaken);
                     } else {
-                        if (gameObject.transform.position != m_SpawnPointBlue.position) {
-                            gm.SendMessage("PlayAudio", m_BlueFlagReturned);
-                        }
-
                         gameObject.transform.position = m_SpawnPointBlue.position;
                         
-                        m_FlagAtBaseBlue.SetActive(true);
+                        m_FlagAtBaseBlue.SetActive(false);
                         m_FlagDownBlue.SetActive(false);
-                        m_FlagTakenBlue.SetActive(false);
+                        m_FlagTakenBlue.SetActive(true);
 
-                        /// Blue Flag Returned
+                        /// Blue Flag Taken
+                        gm.SendMessage("PlayAudio", m_BlueFlagTaken);
                     }
                 }
-            } else {
-            // Other Team
-                gameObject.SetActive(false);
-                other.gameObject.transform.Find("WholeFlag").gameObject.SetActive(true);
-
-                if (gameObject.tag == "Red") {
-                    gameObject.transform.position = m_SpawnPointRed.position;
-                    
-                    m_FlagAtBaseRed.SetActive(false);
-                    m_FlagDownRed.SetActive(false);
-                    m_FlagTakenRed.SetActive(true);
-
-                    /// Red Flag Taken
-                    gm.SendMessage("PlayAudio", m_RedFlagTaken);
-                } else {
-                    gameObject.transform.position = m_SpawnPointBlue.position;
-                    
-                    m_FlagAtBaseBlue.SetActive(false);
-                    m_FlagDownBlue.SetActive(false);
-                    m_FlagTakenBlue.SetActive(true);
-
-                    /// Blue Flag Taken
-                    gm.SendMessage("PlayAudio", m_BlueFlagTaken);
-                }
             }
+        } catch (UnassignedReferenceException) {
+            // Sometimes causes an error when this function finishes before Start.
+            // Not necessary when first starting
         }
-    }
+    } 
 
 }
